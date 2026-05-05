@@ -46,8 +46,7 @@
 	},
 	"devDependencies": {
 		"@ljharb/eslint-config": "^22.2.3",
-		"auto-changelog": "^2.5.0",
-		"encoding": "^0.1.13",
+		"auto-changelog": "^2.5.1",
 		"eslint": "^8.57.1",
 		"in-publish": "^2.0.1",
 		"mock-property": "^1.1.0",
