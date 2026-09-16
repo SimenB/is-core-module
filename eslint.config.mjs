@@ -4,7 +4,8 @@ export default [
 	...ljharb,
 	{
 		rules: {
-			'func-style': 'warn',
+			'func-style': 'off',
+			'no-extra-parens': 'off',
 		},
 	},
 	{

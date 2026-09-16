@@ -5,7 +5,10 @@ var keys = require('object-keys');
 var semver = require('semver');
 var mockProperty = require('mock-property');
 
+/** @import { Module } from '..' */
+
 var isCore = require('../');
+/** @type {import('..').Data} */
 var data = require('../core.json');
 
 var supportsNodePrefix = semver.satisfies(process.versions.node, '^14.18 || >= 16', { includePrerelease: true });
@@ -42,13 +45,17 @@ test('core modules', function (t) {
 	});
 
 	t.test('core via repl module', { skip: !data.repl }, function (st) {
-		var libs = require('repl')._builtinLibs; // eslint-disable-line no-underscore-dangle
+		// eslint-disable-next-line no-underscore-dangle
+		var libs = /** @type {{ _builtinLibs?: string[] }} */ (require('repl'))._builtinLibs;
 		if (!libs) {
 			st.skip('repl._builtinLibs does not exist');
 		} else {
 			for (var i = 0; i < libs.length; ++i) {
 				var mod = libs[i];
-				st.ok(data[mod], mod + ' is a core module');
+				st.ok(
+					data[/** @type {Module} */ (mod)],
+					mod + ' is a core module'
+				);
 				st.doesNotThrow(
 					function () { require(mod); }, // eslint-disable-line no-loop-func
 					'requiring ' + mod + ' does not throw'
@@ -99,7 +106,10 @@ test('core modules', function (t) {
 			for (var i = 0; i < libs.length; ++i) {
 				var mod = libs[i];
 				if (excludeList.indexOf(mod) === -1) {
-					st.ok(data[mod], mod + ' is a core module');
+					st.ok(
+						data[/** @type {keyof typeof data} */ (mod)],
+						mod + ' is a core module'
+					);
 
 					if (Module.isBuiltin) {
 						st.ok(Module.isBuiltin(mod), 'module.isBuiltin(' + mod + ') is true');
@@ -146,11 +156,13 @@ test('core modules', function (t) {
 		st.ok(isCore('buffer_ieee754', '0.8.0'), 'buffer_ieee754 is core in 0.8.0');
 
 		st['throws'](
+			// @ts-expect-error testing invalid input
 			function () { isCore('async_hooks', null); },
 			TypeError,
 			'isCore with non-string non-undefined nodeVersion throws TypeError'
 		);
 		st['throws'](
+			// @ts-expect-error testing invalid input
 			function () { isCore('async_hooks', 123); },
 			TypeError,
 			'isCore with numeric nodeVersion throws TypeError'
@@ -161,11 +173,13 @@ test('core modules', function (t) {
 
 	t.test('isCore with non-boolean specifier and invalid nodeVersion', function (st) {
 		st['throws'](
+			// @ts-expect-error testing invalid input
 			function () { isCore('async_hooks', null); },
 			TypeError,
 			'isCore with null nodeVersion on non-boolean module throws TypeError'
 		);
 		st['throws'](
+			// @ts-expect-error testing invalid input
 			function () { isCore('async_hooks', 123); },
 			TypeError,
 			'isCore with numeric nodeVersion on non-boolean module throws TypeError'
@@ -175,6 +189,7 @@ test('core modules', function (t) {
 	});
 
 	t.test('isCore with undefined nodeVersion and non-string process.versions.node', function (st) {
+		// @ts-expect-error testing an invalid environment
 		st.teardown(mockProperty(process, 'versions', { value: { node: null } }));
 
 		st['throws'](
@@ -187,6 +202,7 @@ test('core modules', function (t) {
 	});
 
 	t.test('isCore with undefined nodeVersion and falsy process.versions', function (st) {
+		// @ts-expect-error testing an invalid environment
 		st.teardown(mockProperty(process, 'versions', { value: null }));
 
 		st['throws'](
@@ -200,8 +216,7 @@ test('core modules', function (t) {
 
 	t.test('specifierIncluded with = operator (bare version)', function (st) {
 		var testKey = '__test_equal_op';
-		data[testKey] = '14.18';
-		st.teardown(function () { delete data[testKey]; });
+		st.teardown(mockProperty(data, testKey, { value: '14.18' }));
 
 		st.ok(!isCore(testKey, '14.17.0'), 'returns false when minor version does not match with = op');
 		st.ok(!isCore(testKey, '15.0.0'), 'returns false when major version does not match with = op');
@@ -221,8 +236,7 @@ test('core modules', function (t) {
 	t.test('matchesRange with empty specifiers array', function (st) {
 		var testKey = '__test_empty_split';
 		var testRange = '__test_range__';
-		data[testKey] = testRange;
-		st.teardown(function () { delete data[testKey]; });
+		st.teardown(mockProperty(data, testKey, { value: testRange }));
 
 		var origSplit = String.prototype.split;
 		st.teardown(mockProperty(String.prototype, 'split', {
@@ -230,6 +244,7 @@ test('core modules', function (t) {
 				if (String(this) === testRange) {
 					return [];
 				}
+				// @ts-expect-error TS can't type `arguments` as `split`'s parameters
 				return origSplit.apply(this, arguments);
 			}
 		}));
