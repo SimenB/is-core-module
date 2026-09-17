@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.17.0](https://github.com/inspect-js/is-core-module/compare/v2.16.2...v2.17.0) - 2026-09-16
+
+### Commits
+
+- [Dev Deps] update `auto-changelog` [`f5d1e38`](https://github.com/inspect-js/is-core-module/commit/f5d1e38b1ce95708aa8d2b2b39ea8b375cc11720)
+- [New] add types [`0a4846c`](https://github.com/inspect-js/is-core-module/commit/0a4846cf554d2ff8395f22e7ad229474444cf900)
+- [Dev Deps] update `eslint` [`83aa342`](https://github.com/inspect-js/is-core-module/commit/83aa342bbff1c257fb79da505141e1d473fc0ac0)
+- [Dev Deps] update `@ljharb/eslint-config`, `auto-changelog`, `mock-property`, `tape` [`a45ee2a`](https://github.com/inspect-js/is-core-module/commit/a45ee2a629d2161b0ef1d249deb6a3cd3faef2d6)
+- [Deps] update `hasown` [`7f13111`](https://github.com/inspect-js/is-core-module/commit/7f131112305fb39551be5c7460de7dd5ed0c876a)
+- [actions] set least-privilege `cache-mode` [`9b49659`](https://github.com/inspect-js/is-core-module/commit/9b49659d9326babab24568ab1e84a0d14451f531)
+- [Dev Deps] add missing `object-keys` dev dep [`1b3212a`](https://github.com/inspect-js/is-core-module/commit/1b3212a442a3f1eb492a42b9fb4d722a56b8e30b)
+- [New] add `node:ffi` [`5974139`](https://github.com/inspect-js/is-core-module/commit/59741395def3deb5773849d18d79d14baef1cb6e)
+
 ## [v2.16.2](https://github.com/inspect-js/is-core-module/compare/v2.16.1...v2.16.2) - 2026-05-05
 
 ### Commits
